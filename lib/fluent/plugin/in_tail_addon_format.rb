@@ -20,7 +20,7 @@ module Fluent
       super
 
       ADDON_TEMPLATE_FACTORIES.each do |name, proc|
-        TEMPLATE_FACTORIES[name] = proc
+        TextParser.register_template(name, proc)
       end
     end
   end
