@@ -32,3 +32,25 @@ class ElasticsearchParserTest < Test::Unit::TestCase
     }, record)
   end
 end
+
+class PostfixParserTest < Test::Unit::TestCase
+  include ParserTest
+  
+  def setup
+    TextParser.new
+    @parser = TextParser::TEMPLATE_FACTORIES['postfix'].call
+  end
+
+  def test_call
+    time, record = @parser.call('2012-03-26T19:49:56+09:00 worker001 postfix/smtp[13747]: 31C5C1C000C: to=<foo@example.com>, relay=mx.example.com[127.0.0.1]:25, delay=0.74, delays=0.06/0.01/0.25/0.42, dsn=2.0.0, status=sent (250 ok dirdel)')
+
+    assert_equal(str2time('2012-03-26T19:49:56+09:00', '%Y-%m-%dT%H:%M:%S %z'), time)
+    assert_equal({
+      'host' => 'worker001',
+      'process' => 'postfix/smtp[13747]',
+      'message' => '31C5C1C000C: to=<foo@example.com>, relay=mx.example.com[127.0.0.1]:25, delay=0.74, delays=0.06/0.01/0.25/0.42, dsn=2.0.0, status=sent (250 ok dirdel)',
+      'key' => '31C5C1C000C',
+      'address' => 'foo@example.com',
+    }, record)
+  end
+end
