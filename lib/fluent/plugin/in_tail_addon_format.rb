@@ -16,12 +16,8 @@ module Fluent
       },
     }
 
-    def initialize
-      super
-
-      ADDON_TEMPLATE_FACTORIES.each do |name, proc|
-        TextParser.register_template(name, proc)
-      end
+    ADDON_TEMPLATE_FACTORIES.each do |name, proc|
+      TextParser.register_template(name, proc)
     end
   end
 end
